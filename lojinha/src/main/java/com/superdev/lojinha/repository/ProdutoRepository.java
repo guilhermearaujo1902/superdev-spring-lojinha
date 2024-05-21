@@ -17,16 +17,12 @@ public class ProdutoRepository {
     }
 
     public Produto findById(int id) {
-        Produto produtoEncontrado = new Produto();
-        this.listaProdutos.forEach(produto -> {
+        for (Produto produto : this.listaProdutos) {
             if (produto.getId() == id) {
-                produtoEncontrado.setId(produto.getId());
-                produtoEncontrado.setNome(produto.getNome());
-                produtoEncontrado.setPreco(produto.getPreco());
-                produtoEncontrado.setStatus(produto.isStatus());
+                return produto;
             }
-        });
-        return  produtoEncontrado;
+        }
+        return null;
     }
 
     public Produto create(Produto produto) {
@@ -35,28 +31,20 @@ public class ProdutoRepository {
         return produto;
     }
 
-    public Produto alter(Produto produto) {
-        Produto produtoEncontrado = this.findById(produto.getId());
+    public Produto alter(Produto novoProduto) {
+        Produto produtoAtual = findById(novoProduto.getId());
 
-        if (produtoEncontrado.getId() == 0) {
-            return null;
-        }
+        this.listaProdutos.remove(produtoAtual);
+        this.listaProdutos.add(novoProduto);
 
-        this.listaProdutos.remove(produtoEncontrado);
-        this.listaProdutos.add(produto);
-
-        return produto;
+        return novoProduto;
     }
 
     public Produto delete(int id) {
-        Produto produtoEncontrado = this.findById(id);
+        Produto produtoExcluido = this.findById(id);
 
-        if (produtoEncontrado.getId() == 0) {
-            return null;
-        }
-
-        this.listaProdutos.remove(produtoEncontrado);
-        return produtoEncontrado;
+        this.listaProdutos.remove(produtoExcluido);
+        return produtoExcluido;
     }
 
     private int getIdSequencia(){
